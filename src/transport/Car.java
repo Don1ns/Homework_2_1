@@ -35,6 +35,7 @@ public class Car {
     private final int seats;
     private boolean winterTires;
 
+
     public Car(String brand, String model, float engineVolume, String color, int year, String country, String transmission, String bodyType, int regNumber, int seats, boolean winterTires) {
         if (brand == null || brand.isEmpty() || brand.isBlank()) {
             this.brand = "default";

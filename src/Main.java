@@ -8,5 +8,6 @@ public class Main {
         Car kia = new Car("Kia", "Sportage 4",2.4f,"красный", 2018, "Южная Корея", "механическая", "внедорожник", 433, 5, false);
         Car hyundai = new Car("Hyundai", "Avante",1.6f, "оранжевый", 2016, "Южная Корея", "автоматическая", "седан", 541, 5, true);
 
+
     }
 }
