@@ -3,7 +3,39 @@ package transport;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Car {
+public class Car extends Transport{
+    private float engineVolume;
+    private String transmission;
+    private final String bodyType;
+    private String regNumber;
+    private final int seats;
+    private boolean winterTires;
+    private Key key;
+
+
+    public Car(String brand, String model, float engineVolume,
+               String color, int year, String country,
+               String transmission, String bodyType, String regNumber,
+               int seats, boolean winterTires, boolean remoteStartEngine, boolean keylessAccess, int maxSpeed) {
+        super(brand,model,year,country,color, maxSpeed);
+        if (bodyType == null || bodyType.isBlank()) {
+            this.bodyType = "default";
+        } else {
+            this.bodyType = brand;
+        }
+        if (seats <= 0) {
+            this.seats = 5;
+        } else {
+            this.seats = seats;
+        }
+
+        setEngineVolume(engineVolume);
+        setColor(color);
+        setTransmission(transmission);
+        setRegNumber(regNumber);
+        setWinterTires(winterTires);
+        setKey(remoteStartEngine, keylessAccess);
+    }
     public static class Key {
 
         private final boolean remoteEngineStart;
@@ -14,81 +46,21 @@ public class Car {
             this.keylessAccess = keylessAccess;
         }
 
-        public boolean getRemoteEngineStart() {
+        public boolean isRemoteEngineStart() {
             return remoteEngineStart;
         }
 
-        public boolean getKeylessAccess() {
+        public boolean isKeylessAccess() {
             return keylessAccess;
         }
-    }
 
-    private final String brand;
-    private final String model;
-    private float engineVolume;
-    private String color;
-    private final int year;
-    private final String country;
-    private String transmission;
-    private final String bodyType;
-    private int regNumber;
-    private final int seats;
-    private boolean winterTires;
-
-
-    public Car(String brand, String model, float engineVolume, String color, int year, String country, String transmission, String bodyType, int regNumber, int seats, boolean winterTires) {
-        if (brand == null || brand.isEmpty() || brand.isBlank()) {
-            this.brand = "default";
-        } else {
-            this.brand = brand;
+        @Override
+        public String toString() {
+            return "Key{" +
+                    "remoteEngineStart=" + remoteEngineStart +
+                    ", keylessAccess=" + keylessAccess +
+                    '}';
         }
-        if (model == null || model.isEmpty() || model.isBlank()) {
-            this.model = "default";
-        } else {
-            this.model = model;
-        }
-        if (country == null || country.isEmpty() || country.isBlank()) {
-            this.country = "default";
-        } else {
-            this.country = country;
-        }
-        if (color == null || color.isEmpty() || color.isBlank()) {
-            this.color = "белый";
-        } else {
-            this.color = color;
-        }
-        if (engineVolume <= 0) {
-            this.engineVolume = 1.5f;
-        } else {
-            this.engineVolume = engineVolume;
-        }
-        if (year <= 0) {
-            this.year = 2000;
-        } else {
-            this.year = year;
-        }
-        if (transmission == null || transmission.isEmpty() || transmission.isBlank()) {
-            this.transmission = "default";
-        } else {
-            this.transmission = transmission;
-        }
-        if (bodyType == null || bodyType.isEmpty() || bodyType.isBlank()) {
-            this.bodyType = "default";
-        } else {
-            this.bodyType = brand;
-        }
-        if (regNumber <= 0) {
-            this.regNumber = 999;
-        } else {
-            this.regNumber = regNumber;
-        }
-        if (seats <= 0) {
-            this.seats = 5;
-        } else {
-            this.seats = seats;
-        }
-        this.winterTires = winterTires;
-
     }
 
     public void setSeasonTires() {
@@ -111,15 +83,11 @@ public class Car {
     }
 
     public void setEngineVolume(float engineVolume) {
-        this.engineVolume = engineVolume;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
+        if (engineVolume <= 0) {
+            this.engineVolume = 1.5f;
+        } else {
+            this.engineVolume = engineVolume;
+        }
     }
 
     public String getTransmission() {
@@ -127,15 +95,23 @@ public class Car {
     }
 
     public void setTransmission(String transmission) {
-        this.transmission = transmission;
+        if (transmission == null || transmission.isBlank()) {
+            this.transmission = "default";
+        } else {
+            this.transmission = transmission;
+        }
     }
 
-    public int getRegNumber() {
+    public String getRegNumber() {
         return regNumber;
     }
 
-    public void setRegNumber(int regNumber) {
-        this.regNumber = regNumber;
+    public void setRegNumber(String regNumber) {
+        if (regNumber == null || regNumber.isBlank()) {
+            this.regNumber = "X000XX";
+        } else {
+            this.regNumber = regNumber;
+        }
     }
 
     public boolean isWinterTires() {
@@ -145,21 +121,8 @@ public class Car {
     public void setWinterTires(boolean winterTires) {
         this.winterTires = winterTires;
     }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public String getCountry() {
-        return country;
+    public void setKey(boolean remoteStartEngine, boolean keylessAccess){
+        this.key = new Key(remoteStartEngine,keylessAccess);
     }
 
     public String getBodyType() {
@@ -172,7 +135,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return String.format("%s %s. Объем двигателя в литрах - %s л. Цвет кузова - %s. Год производства -  %d. Страна сборки - %s.", brand, model, engineVolume, color, year, country);
+        return String.format("%s %s. Объем двигателя в литрах - %s л. Цвет кузова - %s. Год производства -  %d. Страна сборки - %s.", getBrand(), getModel(), engineVolume, getColor(), getYear(), getCountry());
     }
 
     @Override
@@ -180,12 +143,11 @@ public class Car {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return Float.compare(car.engineVolume, engineVolume) == 0 && year == car.year && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(color, car.color) && Objects.equals(country, car.country);
+        return Float.compare(car.engineVolume, engineVolume) == 0 && seats == car.seats && winterTires == car.winterTires && Objects.equals(transmission, car.transmission) && Objects.equals(bodyType, car.bodyType) && Objects.equals(regNumber, car.regNumber) && Objects.equals(key, car.key);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(brand, model, engineVolume, color, year, country);
+        return Objects.hash(engineVolume, transmission, bodyType, regNumber, seats, winterTires, key);
     }
-
 }
